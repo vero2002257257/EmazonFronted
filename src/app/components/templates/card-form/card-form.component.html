@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="card">
+    <h1>{{ title }}</h1>
+    <p class="form-title">{{ formTitle }}</p>
+    <data-form 
+      [title]="title"
+      (submitForm)="onFormSubmit($event)">
+    </data-form>
+  </div>
+</div>

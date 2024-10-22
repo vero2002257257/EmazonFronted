@@ -1,0 +1,73 @@
+@import '../../../../../assets/colors/colors.scss';
+@import '../../../../../assets/screen-sizes/screen-sizes.scss';
+@import '../../../../../assets/design/corners-shadows.scss';
+ 
+button{
+    border-radius: $corner-radius-small;
+    cursor: pointer;
+    margin: 5px 0;
+    width: 100%;
+ 
+}
+ 
+.main{
+    background: $purple;
+    color: $white;
+    border: none;
+ 
+    &:hover {
+        background-color: lighten($purple, 10%);
+    }
+ 
+    &:active {
+        background-color: darken($purple, 10%);
+    }
+ 
+    &:disabled {
+        background-color: $disabled;
+        cursor: not-allowed;
+    }
+}
+ 
+.secondary {
+    background-color: $white;
+    border: solid 1px $purple;
+    color: $purple;
+ 
+    &:hover {
+        color: lighten($purple, 10%);
+        border: solid 1px lighten($purple, 10%);
+    }
+ 
+    &:active {
+        color: darken($purple, 10%);
+        border: solid 1px darken($purple, 10%);
+    }
+ 
+    &:disabled {
+        color: $disabled;
+        border: solid 1px $disabled;
+        cursor: not-allowed;
+    }
+}
+ 
+.large {
+    padding: 12px 32px;
+    font-size: 18px;
+}
+ 
+.medium {
+    padding: 8px 24px;
+    font-size: 16px;
+}
+ 
+.small {
+    padding: 4px 16px;
+    font-size: 14px;
+}
+ 
+@media (min-width:#{map-get($screen-sizes, tablet)}) {
+    button {
+        width: 380px;
+    }
+}

@@ -1,0 +1,16 @@
+<img [ngClass]="size" src="../../../../assets/logos/Logo-large.png" alt="Logo">
+ 
+<!-- Logo container with dynamic class based on size using getSizeClass() -->
+<div class="logo" [ngClass]="getSizeClass()">
+  <!-- Image element that uses the size as an additional class for styling -->
+  <img [ngClass]="size" src="../../../../assets/logos/Logo-large.png" alt="Logo">
+</div>
+
+<!-- Fallback for direct size-based classes -->
+<div class="logo" [ngClass]="{
+  'large-logo': size === 'large',
+  'medium-logo': size === 'medium',
+  'small-logo': size === 'small'
+}">
+  <img [ngClass]="size" src="../../../../assets/logos/Logo-large.png" alt="Logo">
+</div>

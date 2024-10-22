@@ -1,0 +1,12 @@
+<div class="toast-container">
+    <div *ngFor="let toast of toastMessages" [ngClass]="toast.type" class="toast">
+      <div class="toast-icon">
+        <img [src]="getIconSrc(toast.type)" alt="{{ toast.type }} icon">
+      </div>
+      <div class="toast-text">{{ toast.text }}</div>
+      <!-- Verifica que toast.id no sea undefined antes de mostrar el botón de cierre -->
+      <button *ngIf="toast.id !== undefined" (click)="closeToast(toast.id)" class="toast-close">
+        ✕
+      </button>
+    </div>
+  </div>

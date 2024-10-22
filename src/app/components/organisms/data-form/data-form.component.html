@@ -1,0 +1,29 @@
+<div class="data-form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <text-input 
+        [label]="nameLabel" 
+        formControlName="name" 
+        [errorMessage]="getNameErrorMessage()">
+      </text-input>
+    </div>
+
+    <div class="form-group">
+      <text-input 
+        [label]="descriptionLabel" 
+        formControlName="description" 
+        [errorMessage]="getDescriptionErrorMessage()">
+      </text-input>
+    </div>
+
+    <div class="form-group">
+      <main-button
+        [size]="ButtonSizes.LARGE"
+        [type]="ButtonTypes.MAIN"
+        [htmlType]="'submit'"
+        [disabled]="form.invalid">
+        {{ createButtonText }}
+      </main-button>
+    </div>
+  </form>
+</div>

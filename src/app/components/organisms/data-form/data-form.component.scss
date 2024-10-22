@@ -1,0 +1,69 @@
+@import "../../../../assets/colors/colors.scss"; // Asegúrate de que la ruta sea correcta según la estructura de tu proyecto
+.data-form-container {
+  background-color: $white; // Fondo blanco
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px; // Asegura que el formulario tenga un tamaño adecuado
+  margin: 0 auto;
+
+  h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: $black;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Centra el contenido del grupo
+    margin-bottom: 20px;
+
+    text-input,
+    input {
+      width: 100%;
+      max-width: 400px; // Controla el ancho de los inputs
+    }
+
+    .error-message {
+      color: $error;
+      font-size: 14px;
+      margin-top: 5px;
+      width: 100%;
+      max-width: 400px; // Alinea los mensajes de error con los inputs
+      text-align: left; // Alineación del texto del error
+    }
+  }
+
+  main-button {
+    display: block;
+    width: 100%;
+    max-width: 400px; // Alinea el ancho del botón con los inputs
+    margin: 0 auto; // Centra el botón
+    padding: 12px 0;
+  }
+
+  input {
+    border: 1px solid $border; // Borde estándar
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $purple; // Color de borde al enfocar
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .data-form-container {
+    padding: 15px; // Reduce el padding en pantallas más pequeñas
+  }
+
+  h2 {
+    font-size: 20px; // Ajusta el tamaño de fuente en pantallas pequeñas
+  }
+}

@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import '../../assets/screen-sizes/screen-sizes.scss';
+ 
+ 
+$font-family-base: 'Poppins', sans-serif;
+// Estilos para cuerpos de texto
+.body-L {
+    font-size: 22px;
+    line-height: 144%;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+.body-M {
+    font-size: 18px;
+    line-height: 132%;
+    font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+.body-M-Regular {
+    font-size: 18px;
+    line-height: 132%;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+.body-S {
+    font-size: 16px;
+    line-height: 148%;
+    font-weight: 300;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+.body-S-Regular {
+    font-size: 16px;
+    line-height: 148%;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+.body-XS {
+    font-size: 14px;
+    line-height: 140%;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+// Estilos para encabezados
+h1 {
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 128%;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+h2 {
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 120%;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+h3 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 124%;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+h4 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 132%;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+// Media queries para tamaños de pantalla más pequeños
+@media (max-width: #{map-get($screen-sizes, tablet)}) {
+    h1 {
+        font-size: 32px;
+        line-height: 124%;
+    }
+ 
+    h2 {
+        font-size: 24px;
+        line-height: 128%;
+    }
+ 
+    h3 {
+        font-size: 22px;
+        line-height: 124%;
+    }
+ 
+    h4 {
+        font-size: 18px;
+        line-height: 132%;
+    }
+}
+ 
+@media (max-width: #{map-get($screen-sizes, mobile)}) {
+    h1 {
+        font-size: 29px;
+        line-height: 124%;
+        font-weight: 600;
+    }
+ 
+    h2 {
+        font-size: 22px;
+        line-height: 128%;
+        font-weight: 600;
+    }
+ 
+    h3 {
+        font-size: 19px;
+        line-height: 128%;
+        font-weight: 700;
+    }
+ 
+    h4 {
+        font-size: 16px;
+        line-height: 128%;
+        font-weight: 700;
+    }
+}
+ 

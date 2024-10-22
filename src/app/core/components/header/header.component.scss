@@ -1,0 +1,70 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(159.13deg, #9d3fe7 24.13%, #602093 132.21%);
+  color: white;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+  }
+
+  &__logo {
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  &__nav {
+    display: flex;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &.menu-open .header__nav {
+    display: flex; // Muestra el menú cuando está abierto en dispositivos móviles
+  }
+
+  &__menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+
+    &-item {
+      &-link {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px; // Espacio entre el ícono y el texto
+      }
+
+      i {
+        font-size: 16px; // Tamaño de los íconos
+      }
+    }
+  }
+
+  &__menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+
+    @media (max-width: 768px) {
+      display: block; // Muestra el botón en pantallas pequeñas
+    }
+  }
+}

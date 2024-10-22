@@ -1,0 +1,92 @@
+@import '../../../../assets/colors/colors.scss';
+ 
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ 
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  // Espacio entre los elementos
+  padding: 15px 20px;
+  border-radius: 8px;
+  min-width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: $black;
+  border-left: 6px solid;
+  animation: slideIn 0.5s forwards;
+  opacity: 0;
+  transform: translateX(100%);
+}
+ 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+ 
+.toast-icon {
+  margin-right: 10px;
+ 
+  img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: block;
+  }
+}
+ 
+.toast-text {
+  flex: 1;
+  text-align: left;
+  color: inherit;
+}
+ 
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: grayscale($color: #000000);
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -2px;
+}
+ 
+// Estilos para cada tipo de toast
+.error {
+  background-color: #FDECEA;
+  border-left-color: $error;
+}
+ 
+.warning {
+  background-color: #FFF4E5;
+  border-left-color: $attention;
+}
+ 
+.success {
+  background-color: #E6FFFA;
+  border-left-color: $approval;
+}
+ 
+.inform {
+  background-color: #F4F6FB;
+  border-left-color: $info;
+}
