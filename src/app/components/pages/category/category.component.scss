@@ -1,5 +1,5 @@
 @import '../../../../assets/colors/colors.scss';
-@import 'screen-sizes.scss';
+@import '../../../../assets/screen-sizes/screen-sizes.scss';
 
 .container {
   display: flex;
@@ -10,6 +10,7 @@
   padding: 20px;
   max-width: 100%;
   overflow-x: hidden;
+  
 
   @media (max-width: map-get($screen-sizes, desktop)) {
     flex-direction: column;
