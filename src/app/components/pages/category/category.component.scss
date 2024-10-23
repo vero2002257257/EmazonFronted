@@ -1,3 +1,88 @@
-:host {
-    flex: 1;
+@import '../../../../assets/colors/colors.scss';
+@import 'screen-sizes.scss';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px; // Espacio entre el card y la tabla
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  @media (max-width: map-get($screen-sizes, desktop)) {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 12px;
+  }
+}
+
+.tableWrap {
+  width: 100%;
+  margin-top: 20px;
+  max-width: 650px; // Ancho máximo para la tabla
+  background-color: $white;
+  border-radius: 8px;
+  padding: 20px 50px 67px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    min-width: 600px; // Asegura que la tabla tenga un tamaño adecuado
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: $spacer;
+    font-weight: bold;
+    color: $black;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  @media (max-width: map-get($screen-sizes, desktop)) {
+    th, td {
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: map-get($screen-sizes, mobile)) {
+    th, td {
+      padding: 8px;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+
+    button {
+      background-color: $purple;
+      border: none;
+      color: $white;
+      padding: 10px 20px; // Ajuste del tamaño de los botones de paginación
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:disabled {
+        background-color: $disabled;
+        cursor: not-allowed;
+      }
+    }
+  }
 }

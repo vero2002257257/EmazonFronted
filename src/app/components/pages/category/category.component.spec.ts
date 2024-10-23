@@ -6,17 +6,24 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { DataFormComponent } from '../../organisms/data-form/data-form.component';
+import { Category } from '../../../core/models/category.models';
 
 describe('CategoryComponent', () => {
   let component: CategoryComponent;
   let fixture: ComponentFixture<CategoryComponent>;
   let categoryService: CategoryService;
+  let mockCategoryService: any;
 
   beforeEach(async () => {
+    mockCategoryService = {
+      getCategoriesPaged: jest.fn(),
+      create: jest.fn(),
+    } as any;
+
     await TestBed.configureTestingModule({
       declarations: [CategoryComponent],
       imports: [HttpClientTestingModule, TemplatesModule],
-      providers: [CategoryService],
+      providers: [{ provide: CategoryService, useValue: mockCategoryService }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
@@ -24,8 +31,16 @@ describe('CategoryComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CategoryComponent);
     component = fixture.componentInstance;
-    categoryService = TestBed.inject(CategoryService);
-    fixture.detectChanges();
+
+    // Mocking the response of getCategoriesPaged
+    mockCategoryService.getCategoriesPaged.mockReturnValue(
+      of({
+        content: [{ name: 'Books', description: 'Various books' }],
+        totalPages: 1,
+      })
+    );
+
+    fixture.detectChanges(); // Triggers ngOnInit
   });
 
   it('should create', () => {
@@ -38,18 +53,51 @@ describe('CategoryComponent', () => {
       'Create a category for your e-commerce to organize products into groups.'
     );
   });
-  it('should call ngOnInit when the component initializes', () => {
-    jest.spyOn(component, 'ngOnInit');
+
+  it('should call ngOnInit and load categories', () => {
+    jest.spyOn(component, 'loadCategories');
     component.ngOnInit();
-    expect(component.ngOnInit).toHaveBeenCalled();
+    expect(component.loadCategories).toHaveBeenCalled();
+  });
+  it('should load categories correctly', () => {
+    component.loadCategories();
+    expect(mockCategoryService.getCategoriesPaged).toHaveBeenCalledWith(0, component.pageSize, component.sortField, component.sortOrder);
+    expect(component.categories.length).toBe(1);
+    expect(component.hasNextPage).toBe(false); // Based on the mock response
   });
 
-  it('should handleSubmit without errors if formData is empty', () => {
-    const emptyFormData = { name: '', description: '' };
-    jest.spyOn(categoryService, 'create').mockReturnValue(of(true));
+  
+  it('should navigate to the next page', () => {
+    component.currentPage = 0; // Reset current page for the test
+    component.hasNextPage = true; // Allow next page
+    component.nextPage();
+    expect(component.currentPage).toBe(1);
+    expect(mockCategoryService.getCategoriesPaged).toHaveBeenCalled(); // Ensure categories are reloaded
+  });
 
-    component.handleSubmit(emptyFormData);
+  it('should not navigate to the next page if already on the last page', () => {
+    component.currentPage = 1; // Set current page to the last page
+    component.hasNextPage = false; // Disallow next page
+    component.nextPage();
+    expect(component.currentPage).toBe(1); // Should remain on the same page
+  });
 
-    expect(categoryService.create).toHaveBeenCalledWith(emptyFormData);
+  it('should navigate to the previous page', () => {
+    component.currentPage = 1; // Set current page to 1
+    component.previousPage();
+    expect(component.currentPage).toBe(0); // Should go back to page 0
+  });
+
+  it('should not navigate to the previous page if already on the first page', () => {
+    component.currentPage = 0; // Set current page to 0
+    component.previousPage();
+    expect(component.currentPage).toBe(0); // Should remain on the same page
+  });
+
+  it('should handle search functionality correctly', () => {
+    component.onSearch('Books');
+    expect(component.categories.length).toBe(1); // Should filter down to 1 category
+    component.onSearch(''); // Reset search
+    expect(component.categories.length).toBe(1); // Should return to original count
   });
 });
