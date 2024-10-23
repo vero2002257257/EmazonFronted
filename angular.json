@@ -25,7 +25,16 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/colors",
+                "src/assets/design-tokens",
+                "src/assets/logos",
+                "src/assets/typography",
+                "src/assets/screen-sizes"
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -88,16 +97,7 @@
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/assets/colors",
-                "src/assets/design",
-                "src/assets/logos",
-                "src/assets/typography",
-                "src/assets/screen-sizes"
-              ]
-            }
+            "scripts": []
           }
         }
       }

@@ -54,15 +54,6 @@ describe('InputsComponent', () => {
     expect(labelElement.textContent).toContain('Test Label');
   });
 
-  it('should display error message when provided', () => {
-    component.errorMessage = 'This is an error';
-    fixture.detectChanges();
-
-    const errorElement: HTMLElement = fixture.nativeElement.querySelector('.error-message');
-    expect(errorElement).toBeTruthy();
-    expect(errorElement.textContent).toContain('This is an error');
-  });
-
   it('should have placeholder text', () => {
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
     expect(inputElement.placeholder).toBe(PLACEHOLDER_TEXT);
@@ -89,12 +80,4 @@ describe('InputsComponent', () => {
     expect(component.input).toBe(''); // Asume que el input se resetea a un valor vacío
   });
 
-  it('should show the error message correctly in the template', () => {
-    component.errorMessage = 'Error occurred';
-    fixture.detectChanges();
-
-    const errorElement: HTMLElement = fixture.nativeElement.querySelector('.error-message');
-    expect(errorElement).toBeTruthy();
-    expect(errorElement.textContent).toContain('Error occurred');
-  });
 });

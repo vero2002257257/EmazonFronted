@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import './assets/colors/colors.scss';
+html,
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #eddefaee;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

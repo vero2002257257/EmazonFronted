@@ -1,36 +1,24 @@
-@import '../../../../assets/colors/colors.scss';
- 
 .search-container {
   display: flex;
   align-items: center;
-  border: 1px solid $border;
-  border-radius: 4px;
-  padding: 5px;
-  background-color: $white;
- 
+  gap: 8px;
+  margin-bottom: 15px;
+
   .input-element {
-    border: none;
-    outline: none;
-    padding: 10px;
     flex: 1;
-    font-size: 16px;
-    color: $hint_text;
- 
-    &::placeholder {
-      color: $hint_text;
-    }
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
- 
+
   .search-icon {
-    background-color: transparent;
+    background: none;
     border: none;
     cursor: pointer;
-    padding: 5px;
- 
+
     img {
-      width: 20px;  // Ajusta el tamaño de acuerdo a tus necesidades
+      width: 20px;
       height: 20px;
     }
   }
 }
- 

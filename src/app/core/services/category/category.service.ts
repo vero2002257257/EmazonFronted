@@ -42,4 +42,13 @@ export class CategoryService {
       })
     );
   }
+  // Método para obtener categorías paginadas
+  getPagedCategories(page: number = 3, size: number = 4): Observable<any> {
+    return this.http.get<any>(`${this.url}paged?page=${page}&size=${size}`);
+  }
+
+  getCategoriesPaged(page: number, size: number, sortField: string, sortOrder: string): Observable<any> {
+    const params = `?page=${page}&size=${size}&sort=${sortField},${sortOrder}`;
+    return this.http.get<any>(`${this.url}paged${params}`);
+  }
 }
