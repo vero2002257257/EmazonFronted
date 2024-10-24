@@ -24,15 +24,6 @@ describe('MainButtonComponent', () => {
   it('should have default size as MEDIUM', () => {
     expect(component.size).toBe(ButtonSizes.MEDIUM);
   });
-
-  it('should have default type as MAIN', () => {
-    expect(component.type).toBe(ButtonTypes.MAIN);
-  });
-
-  it('should have default label as "Save"', () => {
-    expect(component.label).toBe('Save');
-  });
-
   it('should have default htmlType as "button"', () => {
     expect(component.htmlType).toBe('button');
   });

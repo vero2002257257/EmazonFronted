@@ -7,7 +7,9 @@ import { AtomsModule } from './components/atoms/atoms.module';
 import { CoreModule } from './core/core.module';
 import { PagesModule } from './components/pages/pages.module';
 //import { AuthInterceptor } from './core/interceptors/auth.service';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +19,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     PagesModule,
     CoreModule,
-    HttpClientModule  
+    HttpClientModule, 
   ],
   /*providers: [{
     provide: HTTP_INTERCEPTORS,

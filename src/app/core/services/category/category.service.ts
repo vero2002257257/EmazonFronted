@@ -14,7 +14,7 @@ export class CategoryService {
   private url: string;
 
   constructor(private http: HttpClient, private toast: ToastService) {
-    this.url = `${environment.stockApiUrl}`;
+    this.url = `${environment.stockApiUrl}categories/`;
   }
 
   create(categoryData: Category): Observable<boolean> {

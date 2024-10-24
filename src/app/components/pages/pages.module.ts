@@ -10,7 +10,7 @@ import { OrganismsModule } from '../organisms/organisms.module'; // Importa el m
 @NgModule({
   declarations: [
     CategoryComponent,
-    BrandComponent
+    BrandComponent,
   ],
   imports: [
     CommonModule,
@@ -18,6 +18,7 @@ import { OrganismsModule } from '../organisms/organisms.module'; // Importa el m
     MoleculesModule,
     AtomsModule,
     OrganismsModule, // Asegúrate de incluirlo aquí
+    
   ]
 })
 export class PagesModule {}

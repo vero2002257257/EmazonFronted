@@ -1,27 +1,39 @@
 <header class="header" [class.menu-open]="menuOpen">
   <div class="header__brand">
-    <img src="../../../../assets/logos/logo.png" alt="Emazon logo" class="header__logo" />
+    <img
+      src="../../../../assets/logos/logo.png"
+      alt="Emazon logo"
+      class="header__logo"
+    />
     <h1 class="header__title">Emazon</h1>
   </div>
 
   <nav class="header__nav" [class.hidden]="!menuOpen">
     <ul class="header__menu">
       <li class="header__menu-item">
-        <a href="#" class="header__menu-link">
+        <a
+          routerLink="/category"
+          routerLinkActive="active"
+          class="header__menu-link"
+        >
           <i class="fas fa-plus"></i>
-          Create category
+          Category
         </a>
       </li>
       <li class="header__menu-item">
-        <a href="#" class="header__menu-link">
+        <a
+          routerLink="/brand"
+          routerLinkActive="active"
+          class="header__menu-link"
+        >
           <i class="fas fa-list"></i>
-          List
+          Brand
         </a>
       </li>
       <li class="header__menu-item">
-        <a href="#" class="header__menu-link">
+        <a routerLink="/" routerLinkActive="active" class="header__menu-link">
           <i class="fas fa-times"></i>
-          Close
+          x
         </a>
       </li>
     </ul>

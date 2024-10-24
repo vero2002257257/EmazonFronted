@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ButtonSizes, ButtonTypes } from '../../../shared/utils/enums/atoms-values'; 
+import { ReactiveFormsModule } from '@angular/forms';
 
 interface FormData {
   name: string;
@@ -43,7 +44,6 @@ export class DataFormComponent {
       console.log('Form is invalid');
     }
   }
-  
 
   getErrorMessage(controlName: string, maxLength: number): string {
     const control = this.form.get(controlName);

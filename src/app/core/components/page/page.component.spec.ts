@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PageComponent } from './page.component';
 import { CoreModule } from '../../core.module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -11,8 +12,8 @@ describe('PageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PageComponent],
-      imports: [CoreModule, BrowserAnimationsModule],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA] // Para evitar errores con componentes personalizados
+      imports: [RouterTestingModule, BrowserAnimationsModule],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PageComponent);
@@ -23,7 +24,6 @@ describe('PageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
   it('should render app-header', () => {
     const headerElement = fixture.nativeElement.querySelector('app-header');
     expect(headerElement).toBeTruthy();

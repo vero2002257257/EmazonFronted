@@ -19,35 +19,38 @@ import { InputSizes } from '../../../shared/utils/enums/atoms-values';
   ],
 })
 export class InputsComponent implements ControlValueAccessor {
-  @Input() size: InputSizes = InputSizes.NORMAL;
-  @Input() label: string = LABEL_TEXT;
-  @Input() errorMessage: string = '';
+  @Input() size: InputSizes = InputSizes.NORMAL; // Tamaño del input
+  @Input() label: string = LABEL_TEXT; // Etiqueta que se muestra arriba del input
+  @Input() errorMessage: string = ''; // Mensaje de error para mostrar debajo del input
 
-  placeholderText = PLACEHOLDER_TEXT;
-  onChange: any = () => {};
-  onTouch: any = () => {};
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouch = fn;
-  }
-
+  placeholderText = PLACEHOLDER_TEXT; // Placeholder predeterminado para el input
   input: string = '';
 
+  // Funciones que se registran para manejar cambios y eventos de toque
+  onChange = (value: string) => {};
+  onTouch = () => {};
+
+  // Método requerido por ControlValueAccessor para escribir un valor en el input
   writeValue(input: string | null | undefined): void {
     this.input = input ?? '';
   }
 
+  // Método requerido por ControlValueAccessor para registrar la función de cambio
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // Método requerido por ControlValueAccessor para registrar la función de toque
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  // Maneja el cambio en el valor del input y emite el cambio a través de onChange
   handleInputChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     if (inputElement) {
       this.input = inputElement.value;
-      if (this.onChange) {
-        this.onChange(inputElement.value);
-      }
+      this.onChange(this.input);
     }
   }
 }

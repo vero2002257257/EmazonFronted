@@ -6,6 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Brand } from '../../models/brand-model';
 import { BRAND_CREATED_SUCCESSFULLY, BRAND_CREATE_ERROR, TOAST_STATE } from '../../../shared/utils/constans/services-constans';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +17,6 @@ export class BrandService {
     this.url = `${environment.stockApiUrl}brands/`;
   }
 
-  // Método para crear una categoría
   create(brandData: Brand): Observable<boolean> {
     return this.http.post(this.url, brandData).pipe(
       map(() => {

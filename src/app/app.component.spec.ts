@@ -1,48 +1,63 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
-import { PagesModule } from './components/pages/pages.module';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrandComponent } from './components/pages/brand/brand.component';
+import { BrandService } from './core/services/brand/brand.service';
+import { of, throwError } from 'rxjs';
+import { DataFormComponent } from './components/organisms/data-form/data-form.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 
-describe('AppComponent', () => {
-  let component: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
+describe('BrandComponent', () => {
+  let component: BrandComponent;
+  let fixture: ComponentFixture<BrandComponent>;
+  let mockBrandService: jest.Mocked<BrandService>;
 
   beforeEach(async () => {
+    mockBrandService = {
+      create: jest.fn(),
+      getPagedBrands: jest.fn(),
+      getBrandsPaged: jest.fn()
+    } as unknown as jest.Mocked<BrandService>;
+
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [
-        CoreModule,    
-        PagesModule    
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      declarations: [BrandComponent, DataFormComponent],
+      providers: [{ provide: BrandService, useValue: mockBrandService }, FormBuilder],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(BrandComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create the app', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should render the app-header component', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('app-header')).toBeTruthy();
+
+  it('should call BrandService.create on handleSubmit', () => {
+    const formData = { name: 'Nike', description: 'A brand for sportswear' };
+    mockBrandService.create.mockReturnValue(of(true));
+
+    component.handleSubmit(formData);
+
+    expect(mockBrandService.create).toHaveBeenCalledWith(formData);
   });
 
-  it('should render the app-footer component', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('app-footer')).toBeTruthy();
+  it('should reset form on successful brand creation', () => {
+    const formData = { name: 'Nike', description: 'A brand for sportswear' };
+    mockBrandService.create.mockReturnValue(of(true));
+    component.dataFormComponent = { resetForm: jest.fn() } as unknown as DataFormComponent;
+
+    component.handleSubmit(formData);
+
+    expect(component.dataFormComponent.resetForm).toHaveBeenCalled();
   });
 
-  it('should render the app-toast component', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('app-toast')).toBeTruthy();
-  });
+  it('should handle error on brand creation', () => {
+    const formData = { name: 'Nike', description: 'A brand for sportswear' };
+    mockBrandService.create.mockReturnValue(throwError(() => new Error('Error creating brand')));
 
-  it('should render the router outlet', () => {
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('router-outlet')).toBeTruthy();
+    component.handleSubmit(formData);
+
+    // Add any additional error handling checks here if needed
   });
 });

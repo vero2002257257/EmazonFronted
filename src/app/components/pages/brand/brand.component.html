@@ -1,5 +1,6 @@
-<div class="brand-container">
-  <h1>{{ title }}</h1>
-  <p>{{ formTitle }}</p>
-  <data-form [title]="formTitle" (submitForm)="handleSubmit($event)"></data-form>
+<div class="container">
+  <data-form
+    [title]="formTitle"
+    (submitForm)="handleSubmit($event)"
+  ></data-form>
 </div>
