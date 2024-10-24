@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  stockApiUrl: 'http://localhost:9090/categories/',
+  stockApiUrl: 'http://localhost:9090/',
 };

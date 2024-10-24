@@ -29,28 +29,21 @@ describe('CategoryService', () => {
     toastService = TestBed.inject(ToastService);
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
-
   it('should create a category successfully', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData: Category = {
-      name: 'Books',
-      description: 'A category for books',
-    };
+    const categoryData = { name: 'Books', description: 'A category for books' };
 
     service.create(categoryData).subscribe((response) => {
       expect(response).toBe(true);
     });
 
-    const req = httpMock.expectOne(`${environment.stockApiUrl}`);
+    const req = httpMock.expectOne(`${service['url']}`);
     expect(req.request.method).toBe('POST');
-    req.flush({}); // Simula una respuesta exitosa.
+    req.flush({});
 
     expect(toastSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: TOAST_STATE.success,
+        type: 'success',
         text: CATEGORY_CREATED_SUCCESSFULLY,
       })
     );
@@ -58,10 +51,7 @@ describe('CategoryService', () => {
 
   it('should handle network error when creating a category', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData: Category = {
-      name: 'Invalid',
-      description: 'Category causing error',
-    };
+    const categoryData = { name: 'Invalid', description: 'Category causing error' };
 
     service.create(categoryData).subscribe({
       error: (error) => {
@@ -70,68 +60,108 @@ describe('CategoryService', () => {
       },
     });
 
-    const req = httpMock.expectOne(`${environment.stockApiUrl}`);
+    const req = httpMock.expectOne(`${service['url']}`);
     req.error(new ErrorEvent('Network error'));
 
     expect(toastSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: TOAST_STATE.error,
-        text: CATEGORY_CREATE_ERROR,
+        type: 'error',
+        text: `${CATEGORY_CREATE_ERROR}`,
       })
     );
   });
 
   it('should handle server error with specific message', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData: Category = {
-      name: 'Another',
-      description: 'Another category',
-    };
-    const serverErrorMessage = 'Server is down';
+    const categoryData = { name: 'Another', description: 'Another category' };
 
     service.create(categoryData).subscribe({
       error: (error) => {
         expect(error).toBeDefined();
-        expect(error.message).toContain(`${CATEGORY_CREATE_ERROR}: ${serverErrorMessage}`);
+        expect(error.message).toContain(`${CATEGORY_CREATE_ERROR}: Server is down`);
       },
     });
 
-    const req = httpMock.expectOne(`${environment.stockApiUrl}`);
-    req.flush(
-      { message: serverErrorMessage },
-      { status: 500, statusText: 'Internal Server Error' }
-    );
+    const req = httpMock.expectOne(`${service['url']}`);
+    req.flush({ message: 'Server is down' }, { status: 500, statusText: 'Internal Server Error' });
 
     expect(toastSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: TOAST_STATE.error,
-        text: `${CATEGORY_CREATE_ERROR}: ${serverErrorMessage}`,
+        type: 'error',
+        text: `${CATEGORY_CREATE_ERROR}: Server is down`,
       })
     );
   });
 
-  it('should handle empty error response', () => {
-    const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData: Category = {
-      name: 'Empty Error',
-      description: 'Testing empty error',
-    };
+  it('should retrieve paged categories with sorting', () => {
+    service.getCategoriesPaged(1, 5, 'name', 'asc').subscribe();
+  
+    const req = httpMock.expectOne(
+      `${service['url']}paged?page=1&size=5&sort=name,asc`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush({ content: [], totalPages: 1 });
+  });
 
+  it('should handle 400 error when creating a category', () => {
+    const categoryData = { name: 'ErrorCategory', description: 'Invalid data' };
+  
     service.create(categoryData).subscribe({
       error: (error) => {
         expect(error).toBeDefined();
-        expect(error.message).toBe(CATEGORY_CREATE_ERROR);
+        expect(error.message).toContain(CATEGORY_CREATE_ERROR);
       },
     });
-
-    const req = httpMock.expectOne(`${environment.stockApiUrl}`);
-    req.flush(null, { status: 400, statusText: 'Bad Request' });
-
-    expect(toastSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: TOAST_STATE.error,
-        text: CATEGORY_CREATE_ERROR,
-      })
+  
+    const req = httpMock.expectOne(`${service['url']}`);
+    req.flush({}, { status: 400, statusText: 'Bad Request' });
+  });
+  
+  it('should retrieve paged categories with descending sorting', () => {
+    service.getCategoriesPaged(1, 5, 'name', 'desc').subscribe();
+  
+    const req = httpMock.expectOne(
+      `${service['url']}paged?page=1&size=5&sort=name,desc`
     );
+    expect(req.request.method).toBe('GET');
+    req.flush({ content: [], totalPages: 1 });
+  });
+
+  it('should retrieve paged categories with default parameters', () => {
+    service.getPagedCategories().subscribe();
+  
+    const req = httpMock.expectOne(
+      `${service['url']}paged?page=3&size=4`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush({ content: [], totalPages: 1 });
+  });
+
+  it('should retrieve paged categories with specific parameters', () => {
+    service.getPagedCategories(2, 10).subscribe();
+  
+    const req = httpMock.expectOne(
+      `${service['url']}paged?page=2&size=10`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush({ content: [], totalPages: 1 });
+  });
+
+  it('should handle 404 error when creating a category', () => {
+    const categoryData = { name: 'NonExistentCategory', description: 'This category does not exist' };
+  
+    service.create(categoryData).subscribe({
+      error: (error) => {
+        expect(error).toBeDefined();
+        expect(error.message).toContain(CATEGORY_CREATE_ERROR);
+      },
+    });
+  
+    const req = httpMock.expectOne(`${service['url']}`);
+    req.flush({}, { status: 404, statusText: 'Not Found' });
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 });

@@ -1,0 +1,9 @@
+<div class="sort-by">
+    <label for="sort-select">Sort by:</label>
+    <select id="sort-select" (change)="emitSortChange($event)">
+      <option value="name,asc">↑ Name (Ascending)</option>
+      <option value="name,desc">↓ Name (Descending)</option>
+      <option value="description,asc">↑ Description (Ascending)</option>
+      <option value="description,desc">↓ Description (Descending)</option>
+    </select>
+  </div>

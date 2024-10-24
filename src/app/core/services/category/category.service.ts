@@ -14,7 +14,7 @@ export class CategoryService {
   private url: string;
 
   constructor(private http: HttpClient, private toast: ToastService) {
-    this.url = `${environment.stockApiUrl}`;
+    this.url = `${environment.stockApiUrl}categories/`;
   }
 
   create(categoryData: Category): Observable<boolean> {
@@ -41,5 +41,14 @@ export class CategoryService {
         return throwError(() => new Error(errorMessage));
       })
     );
+  }
+  // Método para obtener categorías paginadas
+  getPagedCategories(page: number = 3, size: number = 4): Observable<any> {
+    return this.http.get<any>(`${this.url}paged?page=${page}&size=${size}`);
+  }
+
+  getCategoriesPaged(page: number, size: number, sortField: string, sortOrder: string): Observable<any> {
+    const params = `?page=${page}&size=${size}&sort=${sortField},${sortOrder}`;
+    return this.http.get<any>(`${this.url}paged${params}`);
   }
 }
