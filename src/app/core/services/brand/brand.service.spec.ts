@@ -117,4 +117,96 @@ describe('BrandService', () => {
     const req = httpMock.expectOne(`${service['url']}`);
     req.flush({}, { status: 404, statusText: 'Not Found' });
   });
+
+  it('should handle 409 error when creating a brand', () => {
+    const brandData: Brand = { name: 'ConflictBrand', description: 'This brand already exists' };
+
+    service.create(brandData).subscribe({
+      error: (error) => {
+        expect(error).toBeDefined();
+        expect(error.message).toContain(BRAND_CREATE_ERROR);
+      },
+    });
+
+    const req = httpMock.expectOne(`${service['url']}`);
+    req.flush({}, { status: 409, statusText: 'Conflict' });
+  });
+
+  it('should handle 500 error when creating a brand', () => {
+    const brandData: Brand = { name: 'ServerErrorBrand', description: 'Server error' };
+
+    service.create(brandData).subscribe({
+      error: (error) => {
+        expect(error).toBeDefined();
+        expect(error.message).toContain(BRAND_CREATE_ERROR);
+      },
+    });
+
+    const req = httpMock.expectOne(`${service['url']}`);
+    req.flush({}, { status: 500, statusText: 'Internal Server Error' });
+  });
+
+  it('should return cached data if available', () => {
+    const cacheKey = 'paged_3_4';
+    const cachedResponse = { content: [], totalPages: 1 };
+    service['cache'].set(cacheKey, cachedResponse);
+  
+    service.getPagedBrands(3, 4).subscribe(response => {
+      expect(response).toBe(cachedResponse);
+    });
+  });
+
+  it('should return cached data with sorting if available', () => {
+    const cacheKey = 'paged_3_4_name_asc';
+    const cachedResponse = { content: [], totalPages: 1 };
+    service['cache'].set(cacheKey, cachedResponse);
+  
+    service.getBrandsPaged(3, 4, 'name', 'asc').subscribe(response => {
+      expect(response).toBe(cachedResponse);
+    });
+  });
+
+  it('should fetch paged brands if not cached', () => {
+    const page = 1;
+    const size = 10;
+    const response = { content: [], totalPages: 1 };
+
+    service.getPagedBrands(page, size).subscribe(res => {
+      expect(res).toEqual(response);
+    });
+
+    const req = httpMock.expectOne(`${service['url']}paged?page=${page}&size=${size}`);
+    expect(req.request.method).toBe('GET');
+    req.flush(response);
+  });
+
+  it('should fetch paged brands with sorting if not cached', () => {
+    const page = 1;
+    const size = 10;
+    const sortField = 'name';
+    const sortOrder = 'asc';
+    const response = { content: [], totalPages: 1 };
+
+    service.getBrandsPaged(page, size, sortField, sortOrder).subscribe(res => {
+      expect(res).toEqual(response);
+    });
+
+    const req = httpMock.expectOne(`${service['url']}paged?page=${page}&size=${size}&sort=${sortField},${sortOrder}`);
+    expect(req.request.method).toBe('GET');
+    req.flush(response);
+  });
+
+  it('should clear the cache', () => {
+    service['cache'].set('test_key', 'test_value');
+    service.clearCache();
+    expect(service['cache'].size).toBe(0);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  afterAll(() => {
+    TestBed.resetTestingModule();
+  });
 });

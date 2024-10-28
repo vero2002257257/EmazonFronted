@@ -13,14 +13,23 @@ export class BrandComponent implements OnInit {
 
   title = 'Create New Brand';
   formTitle = 'Create a Brand for your e-commerce to organize brands into groups.';
-  
+  brands: Brand[] = [];
+  currentPage: number = 0;
+  pageSize: number = 7;
+  hasNextPage: boolean = true;
+  sortField: string = 'name';
+  sortOrder: 'asc' | 'desc' = 'asc';
+
   constructor(private BrandService: BrandService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadbrands();
+  }
 
   handleSubmit(formData: Brand): void {
     this.BrandService.create(formData).subscribe({
       next: () => {
+        this.brands = [{ ...formData }, ...this.brands];
         this.dataFormComponent.resetForm();
       },
       error: () => {
@@ -28,6 +37,45 @@ export class BrandComponent implements OnInit {
       }
     });
   }
+  async loadbrands(): Promise<void> {
+    try {
+      const response = await this.BrandService.getBrandsPaged(this.currentPage, this.pageSize, this.sortField, this.sortOrder).toPromise();
+      this.brands = response.content;
+      this.hasNextPage = this.currentPage < response.totalPages - 1;
+    } catch (err) {
+      console.error('Error loading brands:', err);
+      // Handle the error as needed
+    }
+  }
+  sort(value: string): void {
+    const [sortField, sortOrder] = value.split(',');
+    this.sortField = sortField;
+    this.sortOrder = sortOrder as 'asc' | 'desc';
+    this.loadbrands();
+  }
 
-  
+  nextPage(): void {
+    if (this.hasNextPage) {
+      this.currentPage++;
+      this.loadbrands();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadbrands();
+    }
+  }
+
+  onSearch(query: string): void {
+    if (query) {
+      this.brands = this.brands.filter(Brand => 
+        Brand.name.toLowerCase().includes(query.toLowerCase()) ||
+        Brand.description.toLowerCase().includes(query.toLowerCase())
+      );
+    } else {
+      this.loadbrands();
+    }
+  }
 }

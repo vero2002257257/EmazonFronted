@@ -1,30 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { of, throwError } from 'rxjs';
 import { BrandComponent } from './brand.component';
 import { BrandService } from '../../../core/services/brand/brand.service';
-import { of, throwError } from 'rxjs';
-import { DataFormComponent } from '../../organisms/data-form/data-form.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { CoreModule } from '../../../core/core.module';
+import { ToastService } from '../../../core/services/toast.service';
 
 describe('BrandComponent', () => {
   let component: BrandComponent;
   let fixture: ComponentFixture<BrandComponent>;
-  let mockBrandService: jest.Mocked<BrandService>;
+  let brandServiceMock: any;
 
   beforeEach(async () => {
-    mockBrandService = {
-      create: jest.fn(),
-      getPagedBrands: jest.fn(),
-      getBrandsPaged: jest.fn(),
-    } as unknown as jest.Mocked<BrandService>;
+    // Creamos un mock del BrandService
+    brandServiceMock = {
+      getBrandsPaged: jest.fn().mockReturnValue(of({ content: [], totalPages: 1 })),
+      create: jest.fn().mockReturnValue(of(true))
+    };
 
     await TestBed.configureTestingModule({
-      declarations: [BrandComponent, DataFormComponent],
+      declarations: [BrandComponent],
+      imports: [CoreModule, BrowserAnimationsModule],
       providers: [
-        { provide: BrandService, useValue: mockBrandService },
-        FormBuilder,
+        { provide: BrandService, useValue: brandServiceMock },
+        ToastService
       ],
-      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BrandComponent);
@@ -36,35 +36,55 @@ describe('BrandComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call BrandService.create on handleSubmit', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(of(true));
-
-    component.handleSubmit(formData);
-
-    expect(mockBrandService.create).toHaveBeenCalledWith(formData);
+  it('should call BrandService.getBrandsPaged on loadbrands', () => {
+    component.loadbrands();
+    expect(brandServiceMock.getBrandsPaged).toHaveBeenCalledWith(component.currentPage, component.pageSize, component.sortField, component.sortOrder);
   });
 
-  it('should reset form on successful brand creation', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(of(true));
-    component.dataFormComponent = {
-      resetForm: jest.fn(),
-    } as unknown as DataFormComponent;
-
-    component.handleSubmit(formData);
-
-    expect(component.dataFormComponent.resetForm).toHaveBeenCalled();
+  it('should handle successful brand creation', () => {
+    const brandData = { id: 1, name: 'Test Brand', description: 'Test Description' };
+    component.handleSubmit(brandData);
+    expect(brandServiceMock.create).toHaveBeenCalledWith(brandData);
   });
 
   it('should handle error on brand creation', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(
-      throwError(() => new Error('Error creating brand'))
-    );
+    brandServiceMock.create.mockReturnValueOnce(throwError(() => new Error('Error')));
+    const brandData = { id: 1, name: 'Test Brand', description: 'Test Description' };
+    component.handleSubmit(brandData);
+    expect(brandServiceMock.create).toHaveBeenCalledWith(brandData);
+  });
 
-    component.handleSubmit(formData);
+  it('should call loadbrands with correct sort parameters', () => {
+    const sortSpy = jest.spyOn(component, 'loadbrands');
+    component.sort('name,desc');
+    expect(component.sortField).toBe('name');
+    expect(component.sortOrder).toBe('desc');
+    expect(sortSpy).toHaveBeenCalled();
+  });
 
-    // Add any additional error handling checks here if needed
+  it('should increment currentPage and call loadbrands on nextPage', () => {
+    component.hasNextPage = true;
+    const loadBrandsSpy = jest.spyOn(component, 'loadbrands');
+    component.nextPage();
+    expect(component.currentPage).toBe(1);
+    expect(loadBrandsSpy).toHaveBeenCalled();
+  });
+
+  it('should decrement currentPage and call loadbrands on previousPage', () => {
+    component.currentPage = 1;
+    const loadBrandsSpy = jest.spyOn(component, 'loadbrands');
+    component.previousPage();
+    expect(component.currentPage).toBe(0);
+    expect(loadBrandsSpy).toHaveBeenCalled();
+  });
+
+  it('should filter brands by name or description', () => {
+    component.brands = [
+      {  name: 'Test Brand', description: 'Test Description' },
+      {  name: 'Another Brand', description: 'Another Description' },
+    ];
+    component.onSearch('Test');
+    expect(component.brands.length).toBe(1);
+    expect(component.brands[0].name).toBe('Test Brand');
   });
 });

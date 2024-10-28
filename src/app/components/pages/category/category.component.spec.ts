@@ -247,4 +247,19 @@ describe('CategoryComponent', () => {
 
     expect(component.currentPage).toBe(1); // Debe permanecer en la misma página.
   });
+  it('should call loadCategories on ngOnInit', () => {
+    const loadCategoriesSpy = jest.spyOn(component, 'loadCategories');
+    component.ngOnInit();
+    expect(loadCategoriesSpy).toHaveBeenCalled();
+  });
+  
+  it('should handle error on handleSubmit gracefully', () => {
+    const formData: Category = { name: 'New Category', description: 'A new category' };
+    jest.spyOn(mockCategoryService, 'create').mockReturnValue(throwError(() => new Error('Failed to create category')));
+  
+    component.handleSubmit(formData);
+  
+    expect(component.categories.length).toBe(1); // Verifica que la categoría no se haya agregado en caso de error
+  });
+    
 });

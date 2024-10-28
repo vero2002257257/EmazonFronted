@@ -1,7 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ButtonSizes, ButtonTypes } from '../../../shared/utils/enums/atoms-values'; 
-import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonSizes, ButtonTypes } from '../../../shared/utils/enums/atoms-values';
 
 interface FormData {
   name: string;
@@ -13,35 +12,54 @@ interface FormData {
   templateUrl: './data-form.component.html',
   styleUrls: ['./data-form.component.scss']
 })
-export class DataFormComponent {
-  @Input() title: string = '';  
-  @Output() submitForm = new EventEmitter<FormData>();  
-  form: FormGroup;
+export class DataFormComponent implements OnChanges {
+  @Input() title: string = '';
+  @Input() maxNameLength: number = 50; // Longitud máxima del nombre
+  @Input() maxDescriptionLength: number = 90; // Longitud máxima de la descripción
 
-  readonly ButtonSizes = ButtonSizes;  
-  readonly ButtonTypes = ButtonTypes;  
+  @Output() submitForm = new EventEmitter<FormData>();
+
+  form: FormGroup;
+  readonly ButtonSizes = ButtonSizes;
+  readonly ButtonTypes = ButtonTypes;
 
   readonly nameLabel = 'Name';
   readonly descriptionLabel = 'Description';
-  readonly createButtonText = 'Create Category';  
+  readonly createButtonText = 'Create';
 
   readonly name = 'name';
   readonly description = 'description';
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      [this.name]: ['', [Validators.required, Validators.maxLength(50)]],
-      [this.description]: ['', [Validators.required, Validators.maxLength(120)]]
+      [this.name]: ['', [Validators.required, Validators.maxLength(this.maxNameLength)]],
+      [this.description]: ['', [Validators.required, Validators.maxLength(this.maxDescriptionLength)]]
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['maxNameLength'] || changes['maxDescriptionLength']) {
+      this.updateValidators();
+    }
+  }
+
+  updateValidators() {
+    this.form.get(this.name)?.setValidators([
+      Validators.required,
+      Validators.maxLength(this.maxNameLength)
+    ]);
+    this.form.get(this.description)?.setValidators([
+      Validators.required,
+      Validators.maxLength(this.maxDescriptionLength)
+    ]);
+    this.form.get(this.name)?.updateValueAndValidity();
+    this.form.get(this.description)?.updateValueAndValidity();
   }
 
   onSubmit() {
     if (this.form.valid) {
-      console.log('Form submitted', this.form.value);
       const entityData: FormData = this.form.value;
       this.submitForm.emit(entityData);
-    } else {
-      console.log('Form is invalid');
     }
   }
 
@@ -57,11 +75,11 @@ export class DataFormComponent {
   }
 
   getNameErrorMessage(): string {
-    return this.getErrorMessage(this.name, 50);
+    return this.getErrorMessage(this.name, this.maxNameLength);
   }
 
   getDescriptionErrorMessage(): string {
-    return this.getErrorMessage(this.description, 120);
+    return this.getErrorMessage(this.description, this.maxDescriptionLength);
   }
 
   resetForm() {
