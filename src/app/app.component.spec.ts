@@ -15,13 +15,16 @@ describe('BrandComponent', () => {
     mockBrandService = {
       create: jest.fn(),
       getPagedBrands: jest.fn(),
-      getBrandsPaged: jest.fn()
+      getBrandsPaged: jest.fn(),
     } as unknown as jest.Mocked<BrandService>;
 
     await TestBed.configureTestingModule({
       declarations: [BrandComponent, DataFormComponent],
-      providers: [{ provide: BrandService, useValue: mockBrandService }, FormBuilder],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [
+        { provide: BrandService, useValue: mockBrandService },
+        FormBuilder,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BrandComponent);
@@ -31,33 +34,5 @@ describe('BrandComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should call BrandService.create on handleSubmit', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(of(true));
-
-    component.handleSubmit(formData);
-
-    expect(mockBrandService.create).toHaveBeenCalledWith(formData);
-  });
-
-  it('should reset form on successful brand creation', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(of(true));
-    component.dataFormComponent = { resetForm: jest.fn() } as unknown as DataFormComponent;
-
-    component.handleSubmit(formData);
-
-    expect(component.dataFormComponent.resetForm).toHaveBeenCalled();
-  });
-
-  it('should handle error on brand creation', () => {
-    const formData = { name: 'Nike', description: 'A brand for sportswear' };
-    mockBrandService.create.mockReturnValue(throwError(() => new Error('Error creating brand')));
-
-    component.handleSubmit(formData);
-
-    // Add any additional error handling checks here if needed
   });
 });

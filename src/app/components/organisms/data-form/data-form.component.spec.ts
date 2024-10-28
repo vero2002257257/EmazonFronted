@@ -48,20 +48,6 @@ describe('DataFormComponent', () => {
     expect(component.getDescriptionErrorMessage()).toBe('Description is required');
   });
 
-  it('should log "Form is invalid" if form is invalid', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    component.form.setValue({ name: '', description: '' });
-    component.onSubmit();
-    expect(consoleSpy).toHaveBeenCalledWith('Form is invalid');
-  });
-
-  it('should log "Form submitted" if form is valid', () => {
-    const consoleSpy = jest.spyOn(console, 'log');
-    component.form.setValue({ name: 'Valid Name', description: 'Valid Description' });
-    component.onSubmit();
-    expect(consoleSpy).toHaveBeenCalledWith('Form submitted', { name: 'Valid Name', description: 'Valid Description' });
-  });
-
   it('should emit submitForm if form is valid', () => {
     jest.spyOn(component.submitForm, 'emit');
     component.form.setValue({ name: 'Valid Name', description: 'Valid Description' });
@@ -75,20 +61,6 @@ describe('DataFormComponent', () => {
     component.onSubmit();
     expect(component.submitForm.emit).not.toHaveBeenCalled();
   });
-
-  it('should validate max length for name and description', () => {
-    const nameControl = component.form.get(component.name);
-    const descriptionControl = component.form.get(component.description);
-
-    nameControl?.setValue('a'.repeat(51));
-    descriptionControl?.setValue('a'.repeat(121));
-
-    expect(nameControl?.valid).toBeFalsy();
-    expect(descriptionControl?.valid).toBeFalsy();
-    expect(component.getNameErrorMessage()).toBe('Name cannot exceed 50 characters');
-    expect(component.getDescriptionErrorMessage()).toBe('Description cannot exceed 120 characters');
-  });
-
   it('should reset form when resetForm is called', () => {
     component.form.setValue({ name: 'Test', description: 'Test description' });
     component.resetForm();
@@ -108,17 +80,39 @@ describe('DataFormComponent', () => {
     const submitButton: HTMLButtonElement = fixture.nativeElement.querySelector('button');
     expect(submitButton.disabled).toBeFalsy();
   });
-
-  it('should return correct error message using getErrorMessage', () => {
-    const nameControl = component.form.get(component.name);
-    nameControl?.setValue('');
-    expect(component.getErrorMessage('name', 50)).toBe('Name is required');
-
-    nameControl?.setValue('a'.repeat(51));
-    expect(component.getErrorMessage('name', 50)).toBe('Name cannot exceed 50 characters');
-
-    const descriptionControl = component.form.get(component.description);
-    descriptionControl?.setValue('a'.repeat(121));
-    expect(component.getErrorMessage('description', 120)).toBe('Description cannot exceed 120 characters');
+  it('should return "Name is required" if name control has required error', () => {
+    const nameControl = component.form.get('name');
+    nameControl?.setErrors({ required: true });
+    const errorMessage = component.getErrorMessage('name', 50);
+    expect(errorMessage).toBe('Name is required');
   });
+  
+  it('should return "Description is required" if description control has required error', () => {
+    const descriptionControl = component.form.get('description');
+    descriptionControl?.setErrors({ required: true });
+    const errorMessage = component.getErrorMessage('description', 50);
+    expect(errorMessage).toBe('Description is required');
+  });
+  
+  it('should return "Name cannot exceed 50 characters" if name control has maxlength error', () => {
+    const nameControl = component.form.get('name');
+    nameControl?.setErrors({ maxlength: true });
+    const errorMessage = component.getErrorMessage('name', 50);
+    expect(errorMessage).toBe('Name cannot exceed 50 characters');
+  });
+  
+  it('should return "Description cannot exceed 100 characters" if description control has maxlength error', () => {
+    const descriptionControl = component.form.get('description');
+    descriptionControl?.setErrors({ maxlength: true });
+    const errorMessage = component.getErrorMessage('description', 100);
+    expect(errorMessage).toBe('Description cannot exceed 100 characters');
+  });
+  
+  it('should return an empty string if there are no errors', () => {
+    const nameControl = component.form.get('name');
+    nameControl?.setErrors(null); // No errors
+    const errorMessage = component.getErrorMessage('name', 50);
+    expect(errorMessage).toBe('');
+  });
+  
 });

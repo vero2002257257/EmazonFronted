@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'card-form',
@@ -6,9 +6,11 @@ import { Component, Input, Output, EventEmitter} from '@angular/core';
   styleUrls: ['./card-form.component.scss']
 })
 export class CardFormComponent {
-
   @Input() title: string = ''; 
   @Input() formTitle: string = '';    
+  @Input() maxNameLength: number = 50; // Añadido para longitud máxima de nombre
+  @Input() maxDescriptionLength: number = 120; // Añadido para longitud máxima de descripción
+
   @Output() submitForm = new EventEmitter<any>();
 
   onFormSubmit(formData: any): void {
