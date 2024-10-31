@@ -25,8 +25,6 @@ import { PagesModule } from "../components/pages/pages.module";
         OrganismsModule,
         TemplatesModule,
         PagesModule
-
-
     ],
     exports:[
         PageComponent,

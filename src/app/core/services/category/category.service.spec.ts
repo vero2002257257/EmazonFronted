@@ -13,6 +13,7 @@ import {
 import { environment } from '../../../../environments/environment';
 import { Category } from '../../models/category.models';
 
+
 describe('CategoryService', () => {
   let service: CategoryService;
   let httpMock: HttpTestingController;
@@ -31,7 +32,7 @@ describe('CategoryService', () => {
 
   it('should create a category successfully', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData = { name: 'Books', description: 'A category for books' };
+    const categoryData = { id : 1, name: 'Books', description: 'A category for books' };
 
     service.create(categoryData).subscribe((response) => {
       expect(response).toBe(true);
@@ -51,7 +52,7 @@ describe('CategoryService', () => {
 
   it('should handle network error when creating a category', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData = { name: 'Invalid', description: 'Category causing error' };
+    const categoryData = {id : 1, name: 'Invalid', description: 'Category causing error' };
 
     service.create(categoryData).subscribe({
       error: (error) => {
@@ -73,7 +74,7 @@ describe('CategoryService', () => {
 
   it('should handle server error with specific message', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const categoryData = { name: 'Another', description: 'Another category' };
+    const categoryData = { id : 1, name: 'Another', description: 'Another category' };
 
     service.create(categoryData).subscribe({
       error: (error) => {
@@ -104,7 +105,7 @@ describe('CategoryService', () => {
   });
 
   it('should handle 400 error when creating a category', () => {
-    const categoryData = { name: 'ErrorCategory', description: 'Invalid data' };
+    const categoryData = {id : 1, name: 'ErrorCategory', description: 'Invalid data' };
   
     service.create(categoryData).subscribe({
       error: (error) => {
@@ -148,7 +149,7 @@ describe('CategoryService', () => {
   });
 
   it('should handle 404 error when creating a category', () => {
-    const categoryData = { name: 'NonExistentCategory', description: 'This category does not exist' };
+    const categoryData = { id : 1, name: 'NonExistentCategory', description: 'This category does not exist' };
   
     service.create(categoryData).subscribe({
       error: (error) => {
@@ -160,7 +161,71 @@ describe('CategoryService', () => {
     const req = httpMock.expectOne(`${service['url']}`);
     req.flush({}, { status: 404, statusText: 'Not Found' });
   });
+  it('should clear the cache', () => {
+    service.clearCache();
+    expect(service['cache'].size).toBe(0);
+  });
 
+  it('should use cached data for getPagedCategories', () => {
+    const cacheKey = 'paged_3_4';
+    const cachedResponse = { content: [], totalPages: 1 };
+    service['cache'].set(cacheKey, cachedResponse);
+
+    service.getPagedCategories().subscribe((response) => {
+      expect(response).toEqual(cachedResponse);
+    });
+
+    httpMock.expectNone(`${service['url']}paged?page=3&size=4`);
+  });
+
+  it('should use cached data for getCategoriesPaged', () => {
+    const cacheKey = 'paged_1_5_name_asc';
+    const cachedResponse = { content: [], totalPages: 1 };
+    service['cache'].set(cacheKey, cachedResponse);
+
+    service.getCategoriesPaged(1, 5, 'name', 'asc').subscribe((response) => {
+      expect(response).toEqual(cachedResponse);
+    });
+
+    httpMock.expectNone(`${service['url']}paged?page=1&size=5&sort=name,asc`);
+  });
+
+  it('should handle error when getPagedCategories fails', () => {
+    service.getPagedCategories().subscribe({
+      error: (error) => {
+        expect(error).toBeDefined();
+      },
+    });
+
+    const req = httpMock.expectOne(`${service['url']}paged?page=3&size=4`);
+    req.flush({}, { status: 500, statusText: 'Internal Server Error' });
+  });
+
+  it('should handle error when getCategoriesPaged fails', () => {
+    service.getCategoriesPaged(1, 5, 'name', 'asc').subscribe({
+      error: (error) => {
+        expect(error).toBeDefined();
+      },
+    });
+
+    const req = httpMock.expectOne(`${service['url']}paged?page=1&size=5&sort=name,asc`);
+    req.flush({}, { status: 500, statusText: 'Internal Server Error' });
+  });
+
+  it('should not use cache if cache is cleared', () => {
+    const cacheKey = 'paged_1_5_name_asc';
+    const cachedResponse = { content: [], totalPages: 1 };
+    service['cache'].set(cacheKey, cachedResponse);
+
+    service.clearCache();
+
+    service.getCategoriesPaged(1, 5, 'name', 'asc').subscribe((response) => {
+      expect(response).not.toEqual(cachedResponse);
+    });
+
+    const req = httpMock.expectOne(`${service['url']}paged?page=1&size=5&sort=name,asc`);
+    req.flush({ content: [], totalPages: 1 });
+  });
   afterEach(() => {
     httpMock.verify();
   });

@@ -254,7 +254,7 @@ describe('CategoryComponent', () => {
   });
   
   it('should handle error on handleSubmit gracefully', () => {
-    const formData: Category = { name: 'New Category', description: 'A new category' };
+    const formData: Category = {id:1, name: 'New Category', description: 'A new category' };
     jest.spyOn(mockCategoryService, 'create').mockReturnValue(throwError(() => new Error('Failed to create category')));
   
     component.handleSubmit(formData);

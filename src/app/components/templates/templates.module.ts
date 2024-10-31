@@ -5,10 +5,12 @@ import { AtomsModule } from '../atoms/atoms.module';
 import { MoleculesModule } from '../molecules/molecules.module';
 import { OrganismsModule } from '../organisms/organisms.module';
 import { CardFormComponent } from './card-form/card-form.component';
+import { CardFormLargeComponent } from './card-form-large/card-form-large.component';
  
 @NgModule({
     declarations:[
-    CardFormComponent
+    CardFormComponent,
+    CardFormLargeComponent
   ],
     imports:[
         CommonModule,
@@ -17,6 +19,6 @@ import { CardFormComponent } from './card-form/card-form.component';
         MoleculesModule,
         OrganismsModule
     ],
-    exports:[CardFormComponent]
+    exports:[CardFormComponent, CardFormLargeComponent]
 })
 export class TemplatesModule{ }

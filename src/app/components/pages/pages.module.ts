@@ -5,12 +5,14 @@ import { BrandComponent } from './brand/brand.component';
 import { TemplatesModule } from '../templates/templates.module';
 import { AtomsModule } from '../atoms/atoms.module';
 import { MoleculesModule } from '../molecules/molecules.module';
-import { OrganismsModule } from '../organisms/organisms.module'; // Importa el módulo que contiene DataFormComponent
+import { OrganismsModule } from '../organisms/organisms.module';
+import { ProductComponent } from './product/product.component'; // Importa el módulo que contiene DataFormComponent
 
 @NgModule({
   declarations: [
     CategoryComponent,
     BrandComponent,
+    ProductComponent,
   ],
   imports: [
     CommonModule,

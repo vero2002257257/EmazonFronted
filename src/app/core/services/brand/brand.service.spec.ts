@@ -28,7 +28,7 @@ describe('BrandService', () => {
 
   it('should create a brand successfully', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const brandData: Brand = { name: 'Nike', description: 'A brand for sportswear' };
+    const brandData: Brand = {id : 1, name: 'Nike', description: 'A brand for sportswear' };
 
     service.create(brandData).subscribe((response) => {
       expect(response).toBe(true);
@@ -48,7 +48,7 @@ describe('BrandService', () => {
 
   it('should handle network error when creating a brand', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const brandData: Brand = { name: 'Invalid', description: 'Brand causing error' };
+    const brandData: Brand = {id : 1, name: 'Invalid', description: 'Brand causing error' };
 
     service.create(brandData).subscribe({
       error: (error) => {
@@ -70,7 +70,7 @@ describe('BrandService', () => {
 
   it('should handle server error with specific message', () => {
     const toastSpy = jest.spyOn(toastService, 'showToast');
-    const brandData: Brand = { name: 'Another', description: 'Another brand' };
+    const brandData: Brand = {id : 1, name: 'Another', description: 'Another brand' };
 
     service.create(brandData).subscribe({
       error: (error) => {
@@ -91,7 +91,7 @@ describe('BrandService', () => {
   });
 
   it('should handle 400 error when creating a brand', () => {
-    const brandData: Brand = { name: 'ErrorBrand', description: 'Invalid data' };
+    const brandData: Brand = {id : 1, name: 'ErrorBrand', description: 'Invalid data' };
 
     service.create(brandData).subscribe({
       error: (error) => {
@@ -105,7 +105,7 @@ describe('BrandService', () => {
   });
 
   it('should handle 404 error when creating a brand', () => {
-    const brandData: Brand = { name: 'NonExistentBrand', description: 'This brand does not exist' };
+    const brandData: Brand = {id : 1, name: 'NonExistentBrand', description: 'This brand does not exist' };
 
     service.create(brandData).subscribe({
       error: (error) => {
@@ -119,7 +119,7 @@ describe('BrandService', () => {
   });
 
   it('should handle 409 error when creating a brand', () => {
-    const brandData: Brand = { name: 'ConflictBrand', description: 'This brand already exists' };
+    const brandData: Brand = {id : 1, name: 'ConflictBrand', description: 'This brand already exists' };
 
     service.create(brandData).subscribe({
       error: (error) => {
@@ -133,7 +133,7 @@ describe('BrandService', () => {
   });
 
   it('should handle 500 error when creating a brand', () => {
-    const brandData: Brand = { name: 'ServerErrorBrand', description: 'Server error' };
+    const brandData: Brand = {id : 1, name: 'ServerErrorBrand', description: 'Server error' };
 
     service.create(brandData).subscribe({
       error: (error) => {
