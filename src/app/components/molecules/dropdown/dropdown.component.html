@@ -1,0 +1,54 @@
+<div class="dropdown-container" [class.active]="isOpen">
+    <label *ngIf="label" [for]="id">{{ label }}</label>
+    
+    <div class="selected-area" (click)="toggleDropdown($event)" (keydown)="toggleDropdown($event)">
+      <div class="selected-tags" *ngIf="multiple">
+        <div *ngFor="let item of selectedItems" class="tag">
+          {{ item.name }}
+          <span class="remove-tag" (click)="removeItem(item, $event)" (keydown)="removeItem(item, $event)">×</span>
+        </div>
+      </div>
+      
+      <div class="input-area">
+        <input
+          [id]="id"
+          type="text"
+          [placeholder]="getPlaceholder()"
+          [formControl]="searchControl"
+          (focus)="onFocus()"
+          (input)="onSearch($event)"
+        >
+        <div class="dropdown-icon" [class.open]="isOpen">
+          <svg width="10" height="6" viewBox="0 0 10 6">
+            <path d="M1 1L5 5L9 1" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdown-menu" *ngIf="isOpen">
+      <div class="search-icon" *ngIf="showSearchIcon">
+        <svg width="14" height="14" viewBox="0 0 14 14">
+          <path d="M13.7 12.3L11.1 9.7C11.9 8.7 12.4 7.4 12.4 6C12.4 2.7 9.7 0 6.4 0C3.1 0 0.4 2.7 0.4 6C0.4 9.3 3.1 12 6.4 12C7.8 12 9.1 11.5 10.1 10.7L12.7 13.3C12.9 13.5 13.2 13.6 13.4 13.6C13.6 13.6 13.9 13.5 14.1 13.3C14.5 12.9 14.5 12.3 13.7 12.3ZM6.4 10.4C4 10.4 2 8.4 2 6C2 3.6 4 1.6 6.4 1.6C8.8 1.6 10.8 3.6 10.8 6C10.8 8.4 8.8 10.4 6.4 10.4Z" fill="currentColor"/>
+        </svg>
+      </div>
+      
+      <div class="options-list" [class.with-search]="showSearchIcon">
+        <div 
+          *ngFor="let item of filteredItems" 
+          class="option-item"
+          [class.selected]="isSelected(item)"
+          (click)="selectItem(item, $event)"
+          (keydown)="selectItem(item, $event)">
+          <div class="checkbox" *ngIf="multiple">
+            <input type="checkbox" [checked]="isSelected(item)">
+            <span class="checkmark"></span>
+          </div>
+          {{ item.name }}
+        </div>
+        <div *ngIf="filteredItems.length === 0" class="no-results">
+          No results found
+        </div>
+      </div>
+    </div>
+  </div>

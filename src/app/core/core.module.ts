@@ -7,8 +7,8 @@ import { MoleculesModule } from "../components/molecules/molecules.module";
 import { OrganismsModule } from "../components/organisms/organisms.module";
 import { HeaderComponent } from './components/header/header.component';
 import { RouterModule } from '@angular/router';
-import { TemplatesModule } from "../components/templates/templates.module";
 import { PagesModule } from "../components/pages/pages.module";
+import { TemplatesModule } from "../components/templates/templates.module";
 
 @NgModule({
     declarations:[
@@ -23,8 +23,11 @@ import { PagesModule } from "../components/pages/pages.module";
         AtomsModule,
         MoleculesModule,
         OrganismsModule,
-        TemplatesModule,
-        PagesModule
+        PagesModule,
+        TemplatesModule
+    
+
+
     ],
     exports:[
         PageComponent,

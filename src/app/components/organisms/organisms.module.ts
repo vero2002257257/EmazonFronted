@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AtomsModule } from '../atoms/atoms.module';
+import { FormsModule } from '@angular/forms';
 import { MoleculesModule } from '../molecules/molecules.module';
 import { DataFormComponent } from './data-form/data-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ProductDfComponent } from './product-df/product-df.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DataFormExtComponent } from './data-form-ext/data-form-ext.component';
 
 @NgModule({
-    declarations:[DataFormComponent, ProductDfComponent, DataFormExtComponent],
+    declarations:[DataFormComponent, DataFormExtComponent],
     imports:[
         CommonModule,
         ReactiveFormsModule,
@@ -16,6 +16,7 @@ import { DataFormExtComponent } from './data-form-ext/data-form-ext.component';
         AtomsModule,
         FormsModule
     ],
-    exports:[DataFormComponent, ProductDfComponent]
+    exports:[DataFormComponent,  DataFormExtComponent],
+
 })
 export class OrganismsModule{}

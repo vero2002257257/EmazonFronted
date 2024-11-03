@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AtomsModule } from './components/atoms/atoms.module';
 import { CoreModule } from './core/core.module';
 import { PagesModule } from './components/pages/pages.module';
 //import { AuthInterceptor } from './core/interceptors/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -15,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     PagesModule,

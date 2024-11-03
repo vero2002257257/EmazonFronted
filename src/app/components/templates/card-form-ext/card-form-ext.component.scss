@@ -1,0 +1,40 @@
+@import '../../../../assets/colors/colors.scss';
+@import 'screen-sizes.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px; // Ajusta el ancho del card para una mejor presentación
+  background-color: $white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 20px;
+
+  @media (max-width: map-get($screen-sizes, desktop)) {
+    max-width: 100%;
+  }
+}
+
+.card {
+  padding: 20px;
+  
+  h1 {
+    font-size: 28px;
+    color: $black;
+    margin-bottom: 16px;
+  }
+
+  .form-title {
+    font-size: 18px;
+    color: $hint_text;
+    margin-bottom: 20px;
+  }
+
+  data-form-ext {
+    width: 100%;
+  }
+}

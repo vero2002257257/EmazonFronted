@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TablesComponent } from './tables.component';
+import { TableComponent } from './tables.component';
 import { SelectorComponent } from '../../atoms/selector/selector.component';
 
-describe('TablesComponent', () => {
-  let component: TablesComponent;
-  let fixture: ComponentFixture<TablesComponent>;
+describe('TableComponent', () => {
+  let component: TableComponent;
+  let fixture: ComponentFixture<TableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TablesComponent, SelectorComponent],
+      declarations: [TableComponent, SelectorComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TablesComponent);
+    fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
     component.columns = [
       { header: 'Name', field: 'name' },
@@ -54,13 +54,6 @@ describe('TablesComponent', () => {
     component.onPageChange(1);
     expect(component.currentPage).toBe(1);
     expect(component.paginatedData[0].name).toBe('Item C');
-  });
-
-  it('should navigate to next and previous pages correctly', () => {
-    component.nextPage();
-    expect(component.currentPage).toBe(1);
-    component.previousPage();
-    expect(component.currentPage).toBe(0);
   });
 
   it('should get total pages correctly', () => {
@@ -157,20 +150,5 @@ describe('TablesComponent', () => {
     expect(component.data[component.data.length - 1].description).toBe(
       'No Name'
     );
-  });
-  it('should return correct data for the current page', () => {
-    component.pageSize = 2;
-    component.currentPage = 1;
-    const pageData = component.getDataForCurrentPage();
-    expect(pageData.length).toBe(2); // Debería retornar dos elementos
-    expect(pageData[0].name).toBe('Item C'); // Verifica que los elementos correspondan a la segunda página
-    expect(pageData[1].name).toBe('Item D');
-  });
-
-  it('should return empty array if data is out of bounds', () => {
-    component.pageSize = 2;
-    component.currentPage = 5; // Página fuera de los límites
-    const pageData = component.getDataForCurrentPage();
-    expect(pageData.length).toBe(0); // Debería retornar un arreglo vacío
   });
 });

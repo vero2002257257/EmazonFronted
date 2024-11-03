@@ -5,7 +5,6 @@ import { ProductService } from '../../../core/services/product/product.service';
 import { Brand } from '../../../core/models/brand-model';
 import { Category } from '../../../core/models/category.models';
 import { Product } from '../../../core/models/product.models';
-import { firstValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -29,29 +28,31 @@ export class ProductComponent implements OnInit {
     this.loadCategories();
   }
 
-  async loadBrands(): Promise<void> {
-    try {
-      this.brands = await firstValueFrom(this.brandService.getAll() || of([]));
-    } catch (error) {
-      console.error('Error loading brands:', error);
-    }
+  loadBrands(): void {
+    this.brandService.getAll().subscribe({
+      next: (brands) => this.brands = brands,
+      error: (error) => console.error('Error loading brands:', error)
+    });
   }
 
-  async loadCategories(): Promise<void> {
-    try {
-      this.categories = await firstValueFrom(this.categoryService.getAll() || of([]));
-    } catch (error) {
-      console.error('Error loading categories:', error);
-    }
+  loadCategories(): void {
+    this.categoryService.getAll().subscribe({
+      next: (categories) => this.categories = categories,
+      error: (error) => console.error('Error loading categories:', error)
+    });
   }
 
-  async createProduct(product: Product): Promise<void> {
+  createProduct(product: Product): void {
     console.log('Product received:', product);
-    try {
-      await firstValueFrom(this.productService.create(product) || of(null));
-      console.log('Product created successfully');
-    } catch (error) {
-      console.error('Error creating product:', error);
-    }
+    this.productService.create(product).subscribe({
+      next: () => {
+        console.log('Product created successfully');
+        // Handle successful product creation (e.g., show a success message)
+      },
+      error: (error) => {
+        // Handle error during product creation (e.g., show an error message)
+        console.error('Error creating product:', error);
+      }
+    });
   }
 }
