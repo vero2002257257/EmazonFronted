@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { InputsComponent } from './inputs.component';
+import { InputComponent } from './inputs.component';
 import { InputSizes } from '../../../shared/utils/enums/atoms-values';
 import { LABEL_TEXT, PLACEHOLDER_TEXT } from '../../../shared/utils/constans/atoms-constans';
 
 describe('InputsComponent', () => {
-  let component: InputsComponent;
-  let fixture: ComponentFixture<InputsComponent>;
+  let component: InputComponent;
+  let fixture: ComponentFixture<InputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InputsComponent],
+      declarations: [InputComponent],
       imports: [FormsModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InputsComponent);
+    fixture = TestBed.createComponent(InputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -40,10 +40,29 @@ describe('InputsComponent', () => {
     expect(onTouchSpy).toHaveBeenCalled();
   });
 
+  it('should call onChange when value changes', () => {
+    const onChangeSpy = jest.fn();
+    component.registerOnChange(onChangeSpy);
+
+    component.input = 'Test Value';
+    component.onChange(component.input);
+    fixture.detectChanges();
+
+    expect(onChangeSpy).toHaveBeenCalledWith('Test Value');
+  });
+
   it('should update input when writeValue is called', () => {
     component.writeValue('Test Value');
     fixture.detectChanges();
     expect(component.input).toBe('Test Value');
+  });
+
+  it('should handle number type input correctly', () => {
+    component.type = 'number';
+    component.writeValue('123');
+    fixture.detectChanges();
+
+    expect(component.input).toBe(123);
   });
 
   it('should display label correctly', () => {
@@ -58,7 +77,6 @@ describe('InputsComponent', () => {
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
     expect(inputElement.placeholder).toBe(PLACEHOLDER_TEXT);
   });
-
   it('should handle input value change correctly', () => {
     const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
     inputElement.value = 'New input value';
@@ -68,16 +86,16 @@ describe('InputsComponent', () => {
     expect(component.input).toBe('New input value');
   });
 
-  it('should handle writeValue with null correctly', () => {
-    component.writeValue(null);
+  it('should handle changes in errorMessage input', () => {
+    component.ngOnChanges({
+      errorMessage: {
+        currentValue: 'New error',
+        previousValue: '',
+        firstChange: false,
+        isFirstChange: () => false,
+      }
+    });
     fixture.detectChanges();
-    expect(component.input).toBe(''); // Asume que el input se resetea a un valor vacío
+    expect(component.errorMessage).toBe('New error');
   });
-
-  it('should handle writeValue with undefined correctly', () => {
-    component.writeValue(undefined);
-    fixture.detectChanges();
-    expect(component.input).toBe(''); // Asume que el input se resetea a un valor vacío
-  });
-
 });

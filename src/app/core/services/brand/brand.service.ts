@@ -41,6 +41,28 @@ export class BrandService {
     );
   }
 
+  // Método para obtener todas las marcas
+  getAll(): Observable<Brand[]> {
+    const cacheKey = 'allBrands';
+    if (this.cache.has(cacheKey)) {
+      return of(this.cache.get(cacheKey));
+    }
+    return this.http.get<Brand[]>(this.url).pipe(
+      map((brands) => {
+        this.cache.set(cacheKey, brands);
+        return brands;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.toast.showToast({
+          type: TOAST_STATE.error,
+          text: 'Failed to load brands',
+        });
+        return throwError(() => new Error('Failed to load brands'));
+      }),
+      shareReplay(1) // Compartir la respuesta entre múltiples suscriptores.
+    );
+  }
+
   // Método para obtener marcas paginadas con caché
   getPagedBrands(page: number = 3, size: number = 4): Observable<any> {
     const cacheKey = `paged_${page}_${size}`;
@@ -71,6 +93,7 @@ export class BrandService {
       shareReplay(1)
     );
   }
+
 
 
   // Método para limpiar la caché si es necesario

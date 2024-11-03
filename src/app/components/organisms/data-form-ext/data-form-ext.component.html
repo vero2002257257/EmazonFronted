@@ -1,0 +1,112 @@
+<div class="data-form-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <!-- Input de nombre -->
+      <div class="form-group">
+        <text-input 
+          [label]="nameLabel" 
+          formControlName="name" 
+          [errorMessage]="getNameErrorMessage()" >
+        </text-input>
+      </div>
+
+      <!-- Input de descripción -->
+      <div class="form-group">
+        <text-input 
+          [label]="descriptionLabel" 
+          formControlName="description" 
+          [errorMessage]="getDescriptionErrorMessage()">
+        </text-input>
+      </div>
+
+      <!-- Input de cantidad -->
+      <div class="form-group">
+        <text-input 
+          [label]="quantityLabel" 
+          formControlName="quantity" 
+          [errorMessage]="getQuantityErrorMessage()"
+          (keydown)="onKeyDown($event, 'number')" type="number">
+        </text-input>
+      </div>
+
+      <!-- Input de precio -->
+      <div class="form-group">
+        <text-input 
+          [label]="priceLabel" 
+          formControlName="price" 
+          [errorMessage]="getPriceErrorMessage()"
+          (keydown)="onKeyDown($event, 'number')">
+        </text-input>
+      </div>
+
+      <!-- Selector de marca -->
+      <div class="form-group">
+        <label for="brand">Brand</label>
+        <div class="multi-select" (click)="toggleDropdown('brand')" (keydown)="onKeyDown($event, 'dropdown')">
+          <div class="selected-tags">
+            <span *ngIf="selectedBrand" class="tag">
+              {{ selectedBrand.name }} <span (click)="removeBrand()" (keydown)="removeBrand()" class="remove-tag">x</span>
+            </span>
+          </div>
+          <input
+            *ngIf="!selectedBrand"
+            type="text"
+            placeholder="Select a brand"
+            [ngModel]="brandSearch"
+            (ngModelChange)="onBrandSearch($event)"
+            [ngModelOptions]="{standalone: true}"
+            (focus)="toggleDropdown('brand', true)"
+          />
+          <div class="dropdown" *ngIf="showBrandDropdown">
+            <div *ngFor="let brand of filteredBrands" (click)="selectBrand(brand)" (keydown)="onKeyDown($event, 'dropdown')">
+              {{ brand.name }}
+            </div>
+          </div>
+        </div>
+        <div class="error-message" *ngIf="form.get('brandId')?.touched && form.get('brandId')?.invalid">
+          {{ getBrandErrorMessage() }}
+        </div>
+      </div>
+
+      <!-- Selector de categorías -->
+      <div class="form-group">
+        <label for="categories">Categories</label>
+        <div class="multi-select" (click)="toggleDropdown('category')" (keydown)="onKeyDown($event, 'dropdown')">
+          <div class="selected-tags">
+            <span *ngFor="let category of selectedCategories" class="tag">
+              {{ category.name }} <span (click)="removeCategory(category)" (keydown)="removeCategory(category)" class="remove-tag">x</span>
+            </span>
+          </div>
+          <input
+            *ngIf="selectedCategories.length === 0"
+            type="text"
+            placeholder="Select categories"
+            [ngModel]="categorySearch"
+            (ngModelChange)="onCategorySearch($event)"
+            [ngModelOptions]="{standalone: true}"
+            (focus)="toggleDropdown('category', true)"
+          />
+          <div class="dropdown" *ngIf="showCategoryDropdown">
+            <div *ngFor="let category of filteredCategories" (click)="selectCategory(category)" (keydown)="onKeyDown($event, 'dropdown')">
+              {{ category.name }}
+            </div>
+          </div>
+        </div>
+        <div class="error-message" *ngIf="form.get('categoryIds')?.touched && form.get('categoryIds')?.invalid">
+          {{ getCategoryErrorMessage() }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de submit -->
+    <div class="form-group submit-button">
+      <main-button
+        [size]="ButtonSizes.LARGE"
+        [type]="ButtonTypes.MAIN"
+        [disabled]="form.invalid"
+        [htmlType]="'submit'">
+        {{ createButtonText }}
+      </main-button>
+    </div>
+  </form>
+</div>

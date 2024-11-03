@@ -80,8 +80,8 @@ describe('BrandComponent', () => {
 
   it('should filter brands by name or description', () => {
     component.brands = [
-      {  name: 'Test Brand', description: 'Test Description' },
-      {  name: 'Another Brand', description: 'Another Description' },
+      {id : 1,  name: 'Test Brand', description: 'Test Description' },
+      {id : 2,  name: 'Another Brand', description: 'Another Description' },
     ];
     component.onSearch('Test');
     expect(component.brands.length).toBe(1);

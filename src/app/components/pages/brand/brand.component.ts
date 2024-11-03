@@ -6,13 +6,14 @@ import { Brand } from '../../../core/models/brand-model';
 @Component({
   selector: 'app-brand',
   templateUrl: './brand.component.html',
-  styleUrls: ['./brand.component.scss']
+  styleUrls: ['./brand.component.scss'],
 })
 export class BrandComponent implements OnInit {
   @ViewChild(DataFormComponent) dataFormComponent!: DataFormComponent;
 
   title = 'Create New Brand';
-  formTitle = 'Create a Brand for your e-commerce to organize brands into groups.';
+  formTitle =
+    'Create a Brand for your e-commerce to organize brands into groups.';
   brands: Brand[] = [];
   currentPage: number = 0;
   pageSize: number = 7;
@@ -34,19 +35,22 @@ export class BrandComponent implements OnInit {
       },
       error: () => {
         // Manejar el error si es necesario
-      }
+      },
     });
   }
-  async loadbrands(): Promise<void> {
-    try {
-      const response = await this.BrandService.getBrandsPaged(this.currentPage, this.pageSize, this.sortField, this.sortOrder).toPromise();
+
+  loadbrands(): void {
+    this.BrandService.getBrandsPaged(
+      this.currentPage,
+      this.pageSize,
+      this.sortField,
+      this.sortOrder
+    ).subscribe((response) => {
       this.brands = response.content;
       this.hasNextPage = this.currentPage < response.totalPages - 1;
-    } catch (err) {
-      console.error('Error loading brands:', err);
-      // Handle the error as needed
-    }
+    });
   }
+
   sort(value: string): void {
     const [sortField, sortOrder] = value.split(',');
     this.sortField = sortField;
@@ -70,9 +74,10 @@ export class BrandComponent implements OnInit {
 
   onSearch(query: string): void {
     if (query) {
-      this.brands = this.brands.filter(Brand => 
-        Brand.name.toLowerCase().includes(query.toLowerCase()) ||
-        Brand.description.toLowerCase().includes(query.toLowerCase())
+      this.brands = this.brands.filter(
+        (Brand) =>
+          Brand.name.toLowerCase().includes(query.toLowerCase()) ||
+          Brand.description.toLowerCase().includes(query.toLowerCase())
       );
     } else {
       this.loadbrands();

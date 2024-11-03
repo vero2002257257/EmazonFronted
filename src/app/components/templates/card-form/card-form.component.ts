@@ -8,8 +8,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class CardFormComponent {
   @Input() title: string = ''; 
   @Input() formTitle: string = '';    
-  @Input() maxNameLength: number = 50; // Añadido para longitud máxima de nombre
-  @Input() maxDescriptionLength: number = 120; // Añadido para longitud máxima de descripción
+  @Input() maxNameLength: number = 50; 
+  @Input() maxDescriptionLength: number = 120; 
 
   @Output() submitForm = new EventEmitter<any>();
 
