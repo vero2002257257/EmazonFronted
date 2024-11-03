@@ -14,8 +14,8 @@ interface FormData {
 })
 export class DataFormComponent implements OnChanges {
   @Input() title: string = '';
-  @Input() maxNameLength: number = 50; // Longitud máxima del nombre
-  @Input() maxDescriptionLength: number = 90; // Longitud máxima de la descripción
+  @Input() maxNameLength: number = 50; 
+  @Input() maxDescriptionLength: number = 120; 
 
   @Output() submitForm = new EventEmitter<FormData>();
 

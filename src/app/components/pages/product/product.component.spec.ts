@@ -15,13 +15,13 @@ describe('ProductComponent', () => {
 
   beforeEach(async () => {
     const brandSpy = {
-      getAll: jest.fn()
+      getAll: jest.fn().mockReturnValue(of([])) // Devuelve un Observable vacío
     };
     const categorySpy = {
-      getAll: jest.fn()
+      getAll: jest.fn().mockReturnValue(of([])) // Devuelve un Observable vacío
     };
     const productSpy = {
-      create: jest.fn()
+      create: jest.fn().mockReturnValue(of(true)) // Devuelve un Observable exitoso
     };
 
     await TestBed.configureTestingModule({
@@ -46,7 +46,7 @@ describe('ProductComponent', () => {
   });
 
   it('should load brands on init', () => {
-    const brands = [{ id: 1, name: 'Brand 1' , description: 'Description' }];
+    const brands = [{ id: 1, name: 'Brand 1', description: 'Description' }];
     brandService.getAll.mockReturnValue(of(brands));
     fixture.detectChanges();
     expect(component.brands).toEqual(brands);
@@ -61,7 +61,7 @@ describe('ProductComponent', () => {
   });
 
   it('should load categories on init', () => {
-    const categories = [{ id: 1, name: 'Category 1' , description: 'Description' }];
+    const categories = [{ id: 1, name: 'Category 1', description: 'Description' }];
     categoryService.getAll.mockReturnValue(of(categories));
     fixture.detectChanges();
     expect(component.categories).toEqual(categories);

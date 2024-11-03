@@ -11,6 +11,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px; // Espacio entre columnas y filas
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr; // Cambia a una columna en pantallas pequeñas
+    }
   }
 
   .form-group {
@@ -64,7 +68,7 @@
         margin-bottom: 5px;
 
         .tag {
-          background-color: rgb(216, 124, 216);
+          background-color: #9e3fe7c3;
           border-radius: 15px;
           padding: 5px 10px;
           display: flex;
@@ -125,6 +129,21 @@
       width: 200px; 
       margin-top: 20px; 
       margin-left: 170px;
+
+      @media (max-width: 768px) {
+        margin-left: 0; // Centra el botón en pantallas pequeñas
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    .form-grid {
+      gap: 10px;
+    }
+
+    .submit-button main-button {
+      width: 100%;
     }
   }
 }

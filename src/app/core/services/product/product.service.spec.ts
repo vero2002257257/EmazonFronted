@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProductService } from './product.service';
 import { HttpClient } from '@angular/common/http';
-import { Product } from '../../../core/models/product.model';
+import { Product } from '../../../core/models/product.models';
 import { ToastService } from '../../../core/services/toast.service';
 
 describe('ProductService', () => {

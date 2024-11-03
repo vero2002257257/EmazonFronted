@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../toast.service';
 import { environment } from '../../../../environments/environment';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { map, catchError, shareReplay } from 'rxjs/operators';
 import { Category } from '../../models/category.models';
-import { CATEGORY_CREATED_SUCCESSFULLY, CATEGORY_CREATE_ERROR, TOAST_STATE } from '../../../shared/utils/constans/services-constans';
+import {
+  CATEGORY_CREATED_SUCCESSFULLY,
+  CATEGORY_CREATE_ERROR,
+  TOAST_STATE,
+} from '../../../shared/utils/constans/services-constans';
 
 @Injectable({
   providedIn: 'root',

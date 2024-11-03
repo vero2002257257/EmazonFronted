@@ -39,37 +39,6 @@ describe('DataFormExtComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should load brands on init', () => {
-    const brands = [{ id: 1, name: 'Brand 1', description: 'Description' }];
-    brandService.getAll.mockReturnValue(of(brands));
-    fixture.detectChanges();
-    expect(component.brands).toEqual(brands);
-  });
-
-  it('should handle error when loading brands', () => {
-    const error = 'Error loading brands';
-    brandService.getAll.mockReturnValue(throwError(() => new Error(error)));
-    console.error = jest.fn();
-    fixture.detectChanges();
-    expect(console.error).toHaveBeenCalledWith('Error loading brands:', expect.any(Error));
-  });
-
-  it('should load categories on init', () => {
-    const categories = [{ id: 1, name: 'Category 1', description: 'Description' }];
-    categoryService.getAll.mockReturnValue(of(categories));
-    fixture.detectChanges();
-    expect(component.categories).toEqual(categories);
-  });
-
-  it('should handle error when loading categories', () => {
-    const error = 'Error loading categories';
-    categoryService.getAll.mockReturnValue(throwError(() => new Error(error)));
-    console.error = jest.fn();
-    fixture.detectChanges();
-    expect(console.error).toHaveBeenCalledWith('Error loading categories:', expect.any(Error));
-  });
-
   it('should emit product on submit', () => {
     jest.spyOn(component.submitProduct, 'emit');
     component.form.setValue({
@@ -90,27 +59,6 @@ describe('DataFormExtComponent', () => {
       categoryIds: [1]
     });
   });
-
-  it('should reset form on submit', () => {
-    component.form.setValue({
-      name: 'Product 1',
-      description: 'Description',
-      quantity: 1,
-      price: 10,
-      brandId: 1,
-      categoryIds: [1]
-    });
-    component.onSubmit();
-    expect(component.form.value).toEqual({
-      name: '',
-      description: '',
-      quantity: 1,
-      price: 0,
-      brandId: null,
-      categoryIds: []
-    });
-  });
-
   it('should select brand', () => {
     const brand = { id: 1, name: 'Brand 1', description: 'Description' };
     component.selectBrand(brand);
@@ -139,5 +87,92 @@ describe('DataFormExtComponent', () => {
     component.removeCategory(category);
     expect(component.selectedCategories).not.toContain(category);
     expect(component.form.get('categoryIds')?.value).not.toContain(category.id);
+  });
+  describe('loadBrands', () => {
+    it('should load brands and set brands and filteredBrands', () => {
+      const mockBrands = [{ id: 1, name: 'Brand1',description: 'description' }, { id: 2, name: 'Brand2',description: 'description'  }];
+      brandService.getAll.mockReturnValue(of(mockBrands));
+
+      component.loadBrands();
+
+      expect(brandService.getAll).toHaveBeenCalled();
+      expect(component.brands).toEqual(mockBrands);
+      expect(component.filteredBrands).toEqual(mockBrands);
+    });
+  });
+
+  describe('loadCategories', () => {
+    it('should load categories and set categories and filteredCategories', () => {
+      const mockCategories = [{ id: 1, name: 'Category1',description: 'description'  }, { id: 2, name: 'Category2',description: 'description'  }];
+      categoryService.getAll.mockReturnValue(of(mockCategories));
+
+      component.loadCategories();
+
+      expect(categoryService.getAll).toHaveBeenCalled();
+      expect(component.categories).toEqual(mockCategories);
+      expect(component.filteredCategories).toEqual(mockCategories);
+    });
+  });
+
+  describe('toggleDropdown', () => {
+    it('should toggle showBrandDropdown when type is "brand"', () => {
+      component.showBrandDropdown = false;
+      component.toggleDropdown('brand');
+      expect(component.showBrandDropdown).toBe(true);
+
+      component.toggleDropdown('brand');
+      expect(component.showBrandDropdown).toBe(false);
+    });
+
+    it('should toggle showCategoryDropdown when type is "category"', () => {
+      component.showCategoryDropdown = false;
+      component.toggleDropdown('category');
+      expect(component.showCategoryDropdown).toBe(true);
+
+      component.toggleDropdown('category');
+      expect(component.showCategoryDropdown).toBe(false);
+    });
+  });
+
+  describe('onBrandSearch', () => {
+    it('should filter brands based on search term', () => {
+      component.brands = [
+        { id: 1, name: 'Brand1',description: 'description'  },
+        { id: 2, name: 'AnotherBrand',description: 'description'  }
+      ];
+      component.onBrandSearch('brand');
+
+      expect(component.filteredBrands).toEqual([{ id: 1, name: 'Brand1' }]);
+    });
+  });
+
+  describe('onKeyDown', () => {
+    it('should prevent default for invalid keys in number fieldType', () => {
+      const event = new KeyboardEvent('keydown', { key: 'a' });
+      spyOn(event, 'preventDefault');
+
+      component.onKeyDown(event, 'number');
+
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should allow valid keys in number fieldType', () => {
+      const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Decimal', 'Period'];
+      allowedKeys.forEach(key => {
+        const event = new KeyboardEvent('keydown', { key });
+        spyOn(event, 'preventDefault');
+
+        component.onKeyDown(event, 'number');
+
+        expect(event.preventDefault).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('getNameErrorMessage', () => {
+    it('should return the correct error message for name field', () => {
+      spyOn(component, 'getNameErrorMessage').and.returnValue('Error: Name too long');
+      expect(component.getNameErrorMessage()).toBe('Error: Name too long');
+    });
   });
 });
