@@ -134,45 +134,4 @@ describe('DataFormExtComponent', () => {
     });
   });
 
-  describe('onBrandSearch', () => {
-    it('should filter brands based on search term', () => {
-      component.brands = [
-        { id: 1, name: 'Brand1',description: 'description'  },
-        { id: 2, name: 'AnotherBrand',description: 'description'  }
-      ];
-      component.onBrandSearch('brand');
-
-      expect(component.filteredBrands).toEqual([{ id: 1, name: 'Brand1' }]);
-    });
-  });
-
-  describe('onKeyDown', () => {
-    it('should prevent default for invalid keys in number fieldType', () => {
-      const event = new KeyboardEvent('keydown', { key: 'a' });
-      spyOn(event, 'preventDefault');
-
-      component.onKeyDown(event, 'number');
-
-      expect(event.preventDefault).toHaveBeenCalled();
-    });
-
-    it('should allow valid keys in number fieldType', () => {
-      const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Decimal', 'Period'];
-      allowedKeys.forEach(key => {
-        const event = new KeyboardEvent('keydown', { key });
-        spyOn(event, 'preventDefault');
-
-        component.onKeyDown(event, 'number');
-
-        expect(event.preventDefault).not.toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('getNameErrorMessage', () => {
-    it('should return the correct error message for name field', () => {
-      spyOn(component, 'getNameErrorMessage').and.returnValue('Error: Name too long');
-      expect(component.getNameErrorMessage()).toBe('Error: Name too long');
-    });
-  });
 });

@@ -6,9 +6,10 @@ import { MoleculesModule } from '../molecules/molecules.module';
 import { DataFormComponent } from './data-form/data-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataFormExtComponent } from './data-form-ext/data-form-ext.component';
+import { TableModalComponent } from './table-modal/table-modal.component';
 
 @NgModule({
-    declarations:[DataFormComponent, DataFormExtComponent],
+    declarations:[DataFormComponent, DataFormExtComponent, TableModalComponent],
     imports:[
         CommonModule,
         ReactiveFormsModule,
@@ -16,7 +17,7 @@ import { DataFormExtComponent } from './data-form-ext/data-form-ext.component';
         AtomsModule,
         FormsModule
     ],
-    exports:[DataFormComponent,  DataFormExtComponent],
+    exports:[DataFormComponent,  DataFormExtComponent, TableModalComponent],
 
 })
 export class OrganismsModule{}

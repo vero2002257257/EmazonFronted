@@ -9,11 +9,13 @@ import { Product } from '../../../core/models/product.models';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  styleUrls: ['./product.component.scss'],
 })
 export class ProductComponent implements OnInit {
   title = 'Create New Product';
   formTitle = 'Fill in the details below to add a new product.';
+  isModalOpen = false;
+  products: Product[] = [];
   brands: Brand[] = [];
   categories: Category[] = [];
 
@@ -26,33 +28,56 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
     this.loadBrands();
     this.loadCategories();
+    this.loadProducts();
   }
 
   loadBrands(): void {
-    this.brandService.getAll().subscribe({
-      next: (brands) => this.brands = brands,
-      error: (error) => console.error('Error loading brands:', error)
-    });
+    this.brandService.getAll().subscribe(
+      (brands) => (this.brands = brands),
+      (error) => console.error('Error loading brands:', error)
+    );
   }
 
   loadCategories(): void {
-    this.categoryService.getAll().subscribe({
-      next: (categories) => this.categories = categories,
-      error: (error) => console.error('Error loading categories:', error)
-    });
+    this.categoryService.getAll().subscribe(
+      (categories) => (this.categories = categories),
+      (error) => console.error('Error loading categories:', error)
+    );
+  }
+
+  loadProducts(): void {
+    this.productService.getAll().subscribe(
+      (products) => (this.products = products),
+      (error) => console.error('Error loading products:', error)
+    );
+  }
+
+  getBrandName(brandId: number): string {
+    const brand = this.brands.find((b) => b.id === brandId);
+    return brand ? brand.name : 'Unknown';
+  }
+
+  getCategoryName(categoryId: number): string {
+    const category = this.categories.find((c) => c.id === categoryId);
+    return category ? category.name : 'Unknown';
   }
 
   createProduct(product: Product): void {
-    console.log('Product received:', product);
-    this.productService.create(product).subscribe({
-      next: () => {
+    this.productService.create(product).subscribe(
+      () => {
         console.log('Product created successfully');
-        // Handle successful product creation (e.g., show a success message)
+        this.loadProducts(); // Refresh the product list
+        this.closeModal();
       },
-      error: (error) => {
-        // Handle error during product creation (e.g., show an error message)
-        console.error('Error creating product:', error);
-      }
-    });
+      (error) => console.error('Error creating product:', error)
+    );
+  }
+
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
   }
 }

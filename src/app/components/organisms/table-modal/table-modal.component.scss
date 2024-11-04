@@ -1,0 +1,173 @@
+@import '../../../../assets/colors/colors.scss';
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $white;
+    padding: 40px; // Aumentado el padding
+    border-radius: 12px;
+    max-width: 80%; // Cambiado de 95% a 80% para dar más espacio en pantallas grandes
+    width: 950px; // Añadido un ancho fijo máximo
+    max-height: 85vh; // Cambiado a vh para mejor control del viewport
+    min-height: 400px; // Añadido altura mínima
+    overflow-y: auto;
+    z-index: 20;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+
+    .close-button {
+        position: absolute;
+        top: 20px; // Ajustado para el nuevo padding
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .sort-options {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        align-items: center;
+
+        label {
+            font-weight: bold;
+            color: $black;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid $border;
+            background-color: $white;
+            color: $black;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+
+            &:focus {
+                outline: none;
+                border-color: $purple;
+            }
+        }
+    }
+
+    .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: $purple;
+            color: $white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        td {
+            color: $black;
+            font-size: 1rem;
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: $purple;
+            color: $white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+
+            &:hover:not(:disabled) {
+                background-color: lighten($purple, 10%);
+            }
+
+            &:disabled {
+                background-color: $disabled;
+                cursor: not-allowed;
+            }
+        }
+
+        span {
+            display: flex;
+            align-items: center;
+            color: $black;
+            font-weight: bold;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        width: 90%; // Ajuste para pantallas medianas
+        max-width: none;
+    }
+
+    @media (max-width: 768px) {
+        width: 95%; // Ajuste para tablets
+        padding: 20px;
+        min-height: auto; // Eliminar altura mínima en móviles
+        .close-button {
+            font-size: 1.5rem;
+        }
+        .sort-options {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .product-table th, .product-table td {
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        th {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        width: 100%; // Ocupar todo el ancho en móviles pequeños
+        padding: 15px;
+        .close-button {
+            font-size: 1.2rem;
+        }
+        .product-table {
+            display: block;
+            overflow-x: auto;
+        }
+        .product-table th, .product-table td {
+            padding: 8px;
+            font-size: 0.8rem;
+        }
+        th {
+            font-size: 0.9rem;
+        }
+        .pagination button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+    }
+}
