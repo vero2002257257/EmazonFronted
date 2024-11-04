@@ -6,6 +6,7 @@ import { CategoryComponent } from "./category/category.component";
 import { BrandComponent } from './brand/brand.component';
 import { ProductComponent } from './product/product.component';
 import { TemplatesModule } from "../templates/templates.module";
+import { OrganismsModule } from "../organisms/organisms.module";
 
 @NgModule({
     declarations:[
@@ -17,6 +18,7 @@ import { TemplatesModule } from "../templates/templates.module";
         CommonModule,
         MoleculesModule, 
         AtomsModule, 
+        OrganismsModule,
         TemplatesModule]
 
 })

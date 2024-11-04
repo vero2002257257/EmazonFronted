@@ -6,5 +6,11 @@
   [categories]="categories"
   (submitForm)="createProduct($event)">
   </app-card-form-ext>
+  <main-button label="Show Products 👁" (click)="openModal()"></main-button>
+  <app-table-modal
+    *ngIf="isModalOpen"
+    [products]="products"
+    (closeModalEvent)="closeModal()">
+  </app-table-modal>
 </div>
   
